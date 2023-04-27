@@ -6,7 +6,7 @@
 /*   By: lde-mich <lde-mich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 11:58:08 by lde-mich          #+#    #+#             */
-/*   Updated: 2023/04/27 15:53:46 by lde-mich         ###   ########.fr       */
+/*   Updated: 2023/04/27 16:46:22 by lde-mich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_forma
 
 }	t_forma;
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	int		i;
 	int		j;
@@ -43,8 +43,12 @@ int	main(void)
 	t_forma	forma;
 	int		check;
 
-	fl = fopen("test1.txt", "r");
-	if (fscanf(fl, "%d %d %c\n", &zone.w, &zone.h, &zone.c) != 3 || zone.w <= 0 || zone.h <= 0)
+	if (argc != 2)
+		return(write(1, "Error: Argument\n", 16) - 15);
+	fl = fopen(argv[1], "r");
+	if (!fl)
+		return(write(1, "Error: Operation file corrupted\n", 32) - 31);
+	if (fscanf(fl, "%d %d %c\n", &zone.w, &zone.h, &zone.c) != 3 || zone.w <= 0 || zone.h <= 0 || zone.w > 300 || zone.h > 300)
 		return(write(1, "Error: Operation file corrupted\n", 32) - 31);
 	i = 0;
 	while (i < zone.h)
@@ -71,7 +75,7 @@ int	main(void)
 			{
 				if (forma.x <= j && j <= forma.w + forma.x && forma.y <= i && i <= forma.h + forma.y)
 				{
-					if(i < forma.y + 1 || j <= forma.x + 1 || i > forma.h + forma.y - 1 || j >= forma.w + forma.x - 1)
+					if(i < forma.y + 1 || j <= forma.x + 1 || i >= forma.h + forma.y - 1 || j > forma.w + forma.x - 1)
 						mat[i][j] = forma.c;
 					else if (forma.type == 'R')
 						mat[i][j] = forma.c;
