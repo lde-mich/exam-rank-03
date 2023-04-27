@@ -6,7 +6,7 @@
 /*   By: lde-mich <lde-mich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 11:58:08 by lde-mich          #+#    #+#             */
-/*   Updated: 2023/04/27 11:05:29 by lde-mich         ###   ########.fr       */
+/*   Updated: 2023/04/27 16:05:16 by lde-mich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,11 @@ int	main(void)
 	t_zone	zone;
 	t_forma	forma;
 	float	dist;
+	int		check;
 
 	fl = fopen("test1.txt", "r");
-	fscanf(fl, "%d %d %c", &zone.w, &zone.h, &zone.c);
+	if (fscanf(fl, "%d %d %c\n", &zone.w, &zone.h, &zone.c) != 3 || zone.w <= 0 || zone.h <= 0)
+		return(write(1, "Error: Operation file corrupted\n", 32) - 31);
 	i = 0;
 	while (i < zone.h)
 	{
@@ -56,9 +58,12 @@ int	main(void)
 		}
 		i++;
 	}
-	while (fscanf(fl, " %c %f %f %f %c", &forma.type, &forma.x, &forma.y, &forma.r,
-		&forma.c) != -1)
+	check = -1;
+	while ((check = fscanf(fl, " %c %f %f %f %c", &forma.type, &forma.x, &forma.y, &forma.r,
+		&forma.c)) == 5)
 	{
+		if (forma.r <= 0 || (forma.type != 'c' && forma.type != 'C'))
+			return(write(1, "Error: Operation file corrupted\n", 32) - 31);
 		i = 0;
 		while (i < zone.h)
 		{
@@ -75,6 +80,8 @@ int	main(void)
 			i++;
 		}
 	}
+	if (check != 5 && check != -1)
+		return(write(1, "Error: Operation file corrupted\n", 32) - 31);
 	i = 0;
 	while (i < zone.h)
 	{

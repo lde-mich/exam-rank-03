@@ -6,7 +6,7 @@
 /*   By: lde-mich <lde-mich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 11:58:08 by lde-mich          #+#    #+#             */
-/*   Updated: 2023/04/26 12:50:04 by lde-mich         ###   ########.fr       */
+/*   Updated: 2023/04/27 15:53:46 by lde-mich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,11 @@ int	main(void)
 	char	mat[300][300];
 	t_zone	zone;
 	t_forma	forma;
+	int		check;
 
 	fl = fopen("test1.txt", "r");
-	fscanf(fl, "%d %d %c", &zone.w, &zone.h, &zone.c);
+	if (fscanf(fl, "%d %d %c\n", &zone.w, &zone.h, &zone.c) != 3 || zone.w <= 0 || zone.h <= 0)
+		return(write(1, "Error: Operation file corrupted\n", 32) - 31);
 	i = 0;
 	while (i < zone.h)
 	{
@@ -55,9 +57,12 @@ int	main(void)
 		}
 		i++;
 	}
-	while (fscanf(fl, " %c %f %f %f %f %c", &forma.type, &forma.x, &forma.y, &forma.w,
-		&forma.h, &forma.c) != -1)
+	check = -1;
+	while ((check = fscanf(fl, " %c %f %f %f %f %c\n", &forma.type, &forma.x, &forma.y, &forma.w,
+		&forma.h, &forma.c)) == 6)
 	{
+		if (forma.w <= 0 || forma.h <= 0 || (forma.type != 'r' && forma.type != 'R'))
+			return(write(1, "Error: Operation file corrupted\n", 32) - 31);
 		i = 0;
 		while (i < zone.h)
 		{
@@ -66,8 +71,7 @@ int	main(void)
 			{
 				if (forma.x <= j && j <= forma.w + forma.x && forma.y <= i && i <= forma.h + forma.y)
 				{
-					if((i >= forma.y && i <= forma.y + 1) || (j >= forma.x && j <= forma.x + 1)
-					|| (i <= forma.h + forma.y && i >= forma.h + forma.y - 1) || (j <= forma.w + forma.x && j >= forma.w + forma.x - 1))
+					if(i < forma.y + 1 || j <= forma.x + 1 || i > forma.h + forma.y - 1 || j >= forma.w + forma.x - 1)
 						mat[i][j] = forma.c;
 					else if (forma.type == 'R')
 						mat[i][j] = forma.c;
@@ -78,6 +82,8 @@ int	main(void)
 			i++;
 		}
 	}
+	if (check != 6 && check != -1)
+		return(write(1, "Error: Operation file corrupted\n", 32) - 31);
 	i = 0;
 	while (i < zone.h)
 	{
@@ -90,4 +96,5 @@ int	main(void)
 		i++;
 		write(1, "\n", 1);
 	}
+	return (0);
 }
