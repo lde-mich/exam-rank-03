@@ -1,0 +1,65 @@
+Nome dell'assegnazione: mini_paint
+File previsti: *.c *.h
+Funzioni consentite: fopen, fread, fscanf, fclose, write, malloc, calloc, realloc, free, memset, powf, sqrtf
+-------------------------------------------------- ------------------------------------
+
+Scrivete un programma che prenda come parametro un "file delle operazioni" e visualizzi il risultato nel terminale
+
+Il tuo programma prenderà solo un argomento, questo sarà il percorso del "file delle operazioni"
+Se il tuo programma riceve 0 o più di 1 argomento, dovrebbe visualizzare "Errore: argomento" seguito da un \n in STDOUT
+
+$> ./mini_paint | gatto-e
+Errore: argomento$
+$> ./mini_paint non temere la matematica | gatto-e
+Errore: argomento$
+$>
+
+Se il tuo programma riscontra un problema quando apre o legge il "file dell'operazione", dovrebbe scrivere "Errore: file dell'operazione danneggiato" seguito da un \n in STDOUT
+
+Il "file operazione" sarà composto da un'operazione per riga
+Se una riga non è corretta, si è appena verificato un problema.
+Se il tuo programma ha un problema, deve restituire 1
+Se il tuo programma non ha riscontrato alcun problema, dovrebbe restituire 0
+L'ultima riga del file non finirà necessariamente con un \n
+Le righe devono essere lette in ordine e quindi le operazioni devono essere eseguite nello stesso ordine
+Ci deve essere almeno uno spazio tra ogni variabile in una riga
+
+LARGHEZZA ALTEZZA BACKGROUND_CHAR
+Questa riga sarà sempre la prima riga del file e definisce la cosiddetta area di "disegno". Il tuo programma non dovrebbe visualizzare nulla al di fuori di questa "area di disegno". Questa linea sarà presente solo una volta.
+- WIDTH: deve essere un int tale che 0 < WIDTH <= 300, C è il numero di caratteri orizzontali utilizzati per l'area di disegno
+- HEIGHT: deve essere un int come 0 < HEIGHT <= 300, C è il numero di caratteri verticali utilizzati per l'area di disegno
+- BACKGROUND_CHAR: per impostazione predefinita tutta l'"area di disegno" è riempita con BACKGROUND_CHAR
+
+c X Y RAGGIO CAR
+Questa operazione disegnerà un cerchio vuoto, dove viene disegnato solo il bordo del cerchio
+- c: il carattere c
+- X: un galleggiante, la posizione orizzontale del centro del cerchio
+- Y: un galleggiante, la posizione verticale del centro del cerchio
+- RAGGIO: un float positivo diverso da 0, il raggio del cerchio
+- CHAR: un char, il carattere utilizzato per disegnare il cerchio
+
+C X Y RAGGIO CAR
+Questa operazione disegnerà un cerchio pieno
+- C: il carattere C
+- X: un galleggiante, la posizione orizzontale del centro del cerchio
+- Y: un galleggiante, la posizione verticale del centro del cerchio
+- RAGGIO: un float positivo diverso da 0, il raggio del cerchio
+- CHAR: un char, il carattere utilizzato per disegnare il cerchio
+
+L'"area di disegno" è divisa in rettangoli che possono contenere ognuno un singolo carattere (questo perchè siamo in un terminale...) li chiameremo pixel
+Per facilitare i calcoli utilizzeremo solo l'angolo in alto a sinistra di un pixel per sapere se si trova in un cerchio o meno.
+Se l'angolo in alto a sinistra di un pixel si trova a una distanza minore o uguale al raggio di un cerchio, allora fa parte di questo cerchio
+Più:
+Se l'angolo in alto a sinistra di un pixel si trova a una distanza maggiore o uguale a 1 dal bordo di un cerchio, non fa parte di un cerchio vuoto
+Se l'angolo in alto a sinistra di un pixel si trova a una distanza inferiore a 1 dal bordo di un cerchio, allora fa parte di un cerchio vuoto
+
+Dovresti guardare l'immagine fornita mentre leggi le righe successive. Questa immagine rappresenta il terminale. Abbiamo realizzato una "area di disegno" con una LARGHEZZA di 5 e un'ALTEZZA di 3
+Abbiamo scritto una lettera diversa per carattere nell'area di disegno per facilitare le spiegazioni.
+- Se vuoi eseguire l'operazione: C 1.5 1.5 1 0 @ (il cerchio rosa)
+-- Questo farà sì che i caratteri 'b', 'c', 'B', 'C' nell'immagine vengano sostituiti con '@'
+
+Troverai our_mini_paint per aiutarti a testare così come i file operation_file.example
+
+Trucco:
+Se 2 punti definiti da (Xa, Ya) e (Xb, Yb)
+Per calcolare la distanza tra i due punti basta utilizzare la seguente formula: srqt((Xa - Xb) * (Xa - Xb) + (Ya - Yb) * (Ya - Yb))
