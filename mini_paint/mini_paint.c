@@ -6,7 +6,7 @@
 /*   By: lde-mich <lde-mich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 11:58:08 by lde-mich          #+#    #+#             */
-/*   Updated: 2023/04/26 15:11:53 by lde-mich         ###   ########.fr       */
+/*   Updated: 2023/04/27 11:05:29 by lde-mich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ typedef struct s_forma
 	char	type;
 	float	x;
 	float	y;
-	float	w;
-	float	h;
+	float	r;
 	char	c;
 
 }	t_forma;
@@ -42,6 +41,7 @@ int	main(void)
 	char	mat[300][300];
 	t_zone	zone;
 	t_forma	forma;
+	float	dist;
 
 	fl = fopen("test1.txt", "r");
 	fscanf(fl, "%d %d %c", &zone.w, &zone.h, &zone.c);
@@ -56,8 +56,8 @@ int	main(void)
 		}
 		i++;
 	}
-	while (fscanf(fl, " %c %f %f %f %f %c", &forma.type, &forma.x, &forma.y, &forma.w,
-		&forma.h, &forma.c) != -1)
+	while (fscanf(fl, " %c %f %f %f %c", &forma.type, &forma.x, &forma.y, &forma.r,
+		&forma.c) != -1)
 	{
 		i = 0;
 		while (i < zone.h)
@@ -65,7 +65,10 @@ int	main(void)
 			j = 0;
 			while (j < zone.w)
 			{
-				if (srqt((Xa - Xb) * (Xa - Xb) + (Ya - Yb) * (Ya - Yb)))
+				dist = sqrtf((j - forma.x) * (j - forma.x) + (i - forma.y) * (i - forma.y));
+				if ((forma.r - dist) < 1 && (forma.r - dist) > 0 && forma.type == 'c')
+					mat[i][j] = forma.c;
+				else if (dist <= forma.r && forma.type == 'C')
 					mat[i][j] = forma.c;
 				j++;
 			}
