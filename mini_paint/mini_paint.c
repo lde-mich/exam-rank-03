@@ -23,8 +23,8 @@ typedef struct s_forma
 
 int	main(int argc, char **argv)
 {
-	int		i;
-	int		j;
+	int		y;
+	int		x;
 	FILE	*fl;
 	char	mat[300][300];
 	t_zone	zone;
@@ -39,16 +39,16 @@ int	main(int argc, char **argv)
 		return(write(1, "Error: Operation file corrupted\n", 32) - 31);
 	if (fscanf(fl, "%d %d %c\n", &zone.w, &zone.h, &zone.c) != 3 || zone.w <= 0 || zone.h <= 0 || zone.w > 300 || zone.h > 300)
 		return(write(1, "Error: Operation file corrupted\n", 32) - 31);
-	i = 0;
-	while (i < zone.h)
+	y = 0;
+	while (y < zone.h)
 	{
-		j = 0;
-		while (j < zone.w)
+		x = 0;
+		while (x < zone.w)
 		{
-			mat[i][j] = zone.c;
-			j++;
+			mat[y][x] = zone.c;
+			x++;
 		}
-		i++;
+		y++;
 	}
 	check = -1;
 	while ((check = fscanf(fl, " %c %f %f %f %c", &forma.type, &forma.x, &forma.y, &forma.r,
@@ -56,34 +56,34 @@ int	main(int argc, char **argv)
 	{
 		if (forma.r <= 0 || (forma.type != 'c' && forma.type != 'C'))
 			return(write(1, "Error: Operation file corrupted\n", 32) - 31);
-		i = 0;
-		while (i < zone.h)
+		y = 0;
+		while (y < zone.h)
 		{
-			j = 0;
-			while (j < zone.w)
+			x = 0;
+			while (x < zone.w)
 			{
-				dist = sqrtf((j - forma.x) * (j - forma.x) + (i - forma.y) * (i - forma.y));
-				if ((forma.r - dist) < 1 && (forma.r - dist) > 0 && forma.type == 'c')
-					mat[i][j] = forma.c;
+				dist = sqrtf((x - forma.x) * (x - forma.x) + (y - forma.y) * (y - forma.y));
+				if ((forma.r - dist) < 1 && (forma.r - dist) >= 0 && forma.type == 'c')
+					mat[y][x] = forma.c;
 				else if (dist <= forma.r && forma.type == 'C')
-					mat[i][j] = forma.c;
-				j++;
+					mat[y][x] = forma.c;
+				x++;
 			}
-			i++;
+			y++;
 		}
 	}
 	if (check != 5 && check != -1)
 		return(write(1, "Error: Operation file corrupted\n", 32) - 31);
-	i = 0;
-	while (i < zone.h)
+	y = 0;
+	while (y < zone.h)
 	{
-		j = 0;
-		while (j < zone.w)
+		x = 0;
+		while (x < zone.w)
 		{
-			write(1, &mat[i][j], 1);
-			j++;
+			write(1, &mat[y][x], 1);
+			x++;
 		}
-		i++;
+		y++;
 		write(1, "\n", 1);
 	}
 }
